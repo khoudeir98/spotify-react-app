@@ -11,9 +11,6 @@ import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
 import { useEffect } from "react";
 
-const API_KEY_LOCATION = "SPOTIFY_API_KEY"
-const apiKey = localStorage.getItem(API_KEY_LOCATION)
-
 function App() {
     const spotifyApi = new SpotifyWebApi({
       clientId: process.env.REACT_APP_CLIENT_ID,
@@ -24,14 +21,16 @@ function App() {
     const [accessKey, setAccessKey] = useState(null);
     const setEveryonesAccessKey = (stringKey) => {
         setAccessKey(stringKey);
-        spotifyApi.setAccessToken(stringKey)
     };
 
+    useEffect(() => {
+        spotifyApi.setAccessToken((accessKey))
+    }, [accessKey])
 
   return (
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<GarbageStarter />} />
+            <Route path="/" element={<GarbageStarter spotifyApi={spotifyApi} accessKey={accessKey}/>} />
             <Route path="/callback" element={
                 <SpotifyCallbackPage
                     accessKey={accessKey}
