@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import LoginToSpotifyButton from "./components/LoginToSpotifyButton";
 import ArtistPage from "./components/ArtistPage";
 
+const ACCESS_TOKEN_LOCATION = "__ACCESS_TOKEN_LOCATION";
+
 function App() {
     const spotifyApi = new SpotifyWebApi({
       clientId: process.env.REACT_APP_CLIENT_ID,
@@ -19,20 +21,21 @@ function App() {
       redirectUri: process.env.REACT_APP_REDIRECT_URL,
     });
 
-    const [accessKey, setAccessKey] = useState(null);
+    const [accessKey, setAccessKey] = useState(localStorage.getItem(ACCESS_TOKEN_LOCATION));
     const setEveryonesAccessKey = (stringKey) => {
+        localStorage.setItem(ACCESS_TOKEN_LOCATION, stringKey);
         setAccessKey(stringKey);
     };
 
     useEffect(() => {
         spotifyApi.setAccessToken((accessKey))
-    }, [accessKey])
+    }, [accessKey]);
 
   return (
       <div className="App">
           <header className="App-header">
               <h1>Spotify Movie App.  <br /> React to the fun</h1>
-              {!accessKey && <LoginToSpotifyButton />}
+              {<LoginToSpotifyButton overrideText={accessKey ? "Refresh Token" : null} />}
           </header>
           <main className="App-Main">
               <BrowserRouter>

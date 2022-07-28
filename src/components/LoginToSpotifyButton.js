@@ -7,5 +7,5 @@ export default function LoginToSpotifyButton(props) {
 
         window.location = redirect;
     };
-    return <button onClick={login}>Log In to Spotify</button>
+    return <button onClick={login}>{props?.overrideText || "Log In to Spotify"}</button>
 }
