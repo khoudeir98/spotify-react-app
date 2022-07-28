@@ -1,15 +1,16 @@
-import logo from './logo.svg';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-node';
 import { useState } from 'react';
 import {
     BrowserRouter,
     Routes,
-    Route,
+    Route, Link,
 } from "react-router-dom";
 import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
 import { useEffect } from "react";
+import LoginToSpotifyButton from "./components/LoginToSpotifyButton";
+import ArtistPage from "./components/ArtistPage";
 
 function App() {
     const spotifyApi = new SpotifyWebApi({
@@ -28,17 +29,31 @@ function App() {
     }, [accessKey])
 
   return (
-      <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<GarbageStarter spotifyApi={spotifyApi} accessKey={accessKey}/>} />
-            <Route path="/callback" element={
-                <SpotifyCallbackPage
-                    accessKey={accessKey}
-                    setEveryonesAccessKey={setEveryonesAccessKey}
-                />}
-            />
-        </Routes>
-      </BrowserRouter>
+      <div className="App">
+          <header className="App-header">
+              <h1>Spotify Movie App.  <br /> React to the fun</h1>
+              {!accessKey && <LoginToSpotifyButton />}
+          </header>
+          <main className="App-Main">
+              <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<GarbageStarter spotifyApi={spotifyApi} accessKey={accessKey}/>} />
+                    <Route path="/artist" element={
+                        <ArtistPage artistId={'43ZHCT0cAZBISjO8DG9PnE'} spotifyApi={spotifyApi} accessKey={accessKey} />
+                    } />
+                    <Route path="/artist/:artistId" element={(props) => (
+                        <ArtistPage artistId={props.match.artistId} spotifyApi={spotifyApi} accessKey={accessKey} />
+                    )} />
+                    <Route path="/callback" element={
+                        <SpotifyCallbackPage
+                            accessKey={accessKey}
+                            setEveryonesAccessKey={setEveryonesAccessKey}
+                        />}
+                    />
+                </Routes>
+              </BrowserRouter>
+          </main>
+      </div>
   );
 }
 

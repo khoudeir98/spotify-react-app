@@ -1,0 +1,32 @@
+.album-item {
+    display: flex;
+    padding: 10px;
+}
+
+.album-artist {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.album-art-med {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.album-art-med img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
+
+.tracklist {
+
+}
+
+.hidden {
+    display:none;
+}
