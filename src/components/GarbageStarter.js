@@ -20,9 +20,13 @@ export default function GarbageStarter(props) {
 
     return (
         <>
-                {<button onClick={makeCall}>Make Call</button>}
-                <Link to="/artist">ARTISTS</Link>
-                <div>{albumData && <AlbumData data={albumData} key={albumData.id}/>}</div>
+            <div className="flex-row">
+                {<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={makeCall}>Make Call</button>}
+                <Link className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" to="/artist">ARTISTS</Link>
+            </div>
+            <div className="flex-row">
+                {albumData && <AlbumData data={albumData} key={albumData.id}/>}
+            </div>
         </>
     );
 };

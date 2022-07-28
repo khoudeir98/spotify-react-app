@@ -21,12 +21,12 @@ export default function ArtistPage(props) {
     if(isLoading) return <div>LOADING PLEASE WAIT LOADING</div>;
 
     const artistName = (
-        <a key={artistData.id} href={artistData.external_urls.spotify} className="box-fill" aria-label="artist-link">
+        <h1 className="text-5xl">
             {artistData.name}
-        </a>);
+        </h1>);
     const artistImage = artistData.images.filter( (image) => image.width === 640)
         .map( (image) =>
-            <img key={image.url} src={image.url} alt="artist picture 640"/>
+            <img key={image.url} src={image.url} alt="artist picture 640" className="max-w-2xl"/>
         );
 
     const albums = artistAlbumData.map((data) =>
@@ -37,9 +37,11 @@ export default function ArtistPage(props) {
 
     return (
         <div>
-            <div>{artistImage}</div>
-            <div>{artistName}</div>
-            <ul>
+            <div className="flex flex-col justify-center items-center">
+                {artistName}
+                {artistImage}
+            </div>
+            <ul className="grid grid-cols-3 gap-2">
                 {albums}
             </ul>
 

@@ -17,11 +17,11 @@
     overflow: hidden;
 }
 
-.album-art-med img {
-    flex-shrink: 0;
-    min-width: 100%;
-    min-height: 100%
-}
+/*.album-art-med img {*/
+/*    flex-shrink: 0;*/
+/*    min-width: 100%;*/
+/*    min-height: 100%*/
+/*}*/
 
 .tracklist {
 
