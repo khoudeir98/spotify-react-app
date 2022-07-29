@@ -10,7 +10,6 @@ export default function ArtistPage(props) {
     const [artistAlbumData, setArtistAlbumData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     useEffect( () => {
-        // Get Elvis' albums
         (async () => {
             const fetchedArtist = await spotifyApi.getArtist(artistId);
             setArtistData(fetchedArtist.body);
