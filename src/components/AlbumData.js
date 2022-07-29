@@ -17,7 +17,7 @@ export default function AlbumData(props) {
 
     const albumArtMed = props.data.images.filter( (image) => image.width === 300)
         .map( (image) =>
-            <img className="max-w-lg" key={image.url} src={image.url} alt="album art 300"/>
+            <img className="max-w-lg border-double border-4 border-black hover:border-green-200 hover:border-solid" key={image.url} src={image.url} alt="album art 300"/>
         );
 
 
@@ -36,7 +36,7 @@ export default function AlbumData(props) {
 
     return (
         <div key={props.data.id} className="album-item flex-col">
-            <div className="album-artist">{artistsNames}&nbsp;&mdash;&nbsp;{albumName}</div>
+            <div className="album-artist gap-x-1"><span>{artistsNames}</span>&nbsp;&mdash;&nbsp;<span>{albumName}</span></div>
             <div>
                 <div className="album-art-med" onClick={toggleTracklist}>{albumArtMed}</div>
                 <div className={showTracklist ? "tracklist" : "tracklist hidden"}>

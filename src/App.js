@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
     BrowserRouter,
     Routes,
-    Route, Link,
+    Route,
 } from "react-router-dom";
 import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
@@ -21,38 +21,36 @@ function App() {
       redirectUri: process.env.REACT_APP_REDIRECT_URL,
     });
 
-    const [accessKey, setAccessKey] = useState(localStorage.getItem(ACCESS_TOKEN_LOCATION));
-    const setEveryonesAccessKey = (stringKey) => {
-        localStorage.setItem(ACCESS_TOKEN_LOCATION, stringKey);
-        setAccessKey(stringKey);
+    const [accessToken, setAccessToken] = useState(sessionStorage.getItem(ACCESS_TOKEN_LOCATION));
+    const setEveryonesAccessToken = (stringKey) => {
+        sessionStorage.setItem(ACCESS_TOKEN_LOCATION, stringKey);
+        setAccessToken(stringKey);
     };
 
     useEffect(() => {
-        spotifyApi.setAccessToken((accessKey))
-    }, [accessKey]);
+        spotifyApi.setAccessToken((accessToken))
+    }, [accessToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
       <div className="App">
           <header className="App-header">
-              <h1>Spotify Movie App.  <br /> React to the fun</h1>
-              {<LoginToSpotifyButton overrideText={accessKey ? "Refresh Token" : null} />}
+              <h1>Spotify App.  <br /> React to the fun</h1>
+              {<LoginToSpotifyButton overrideText={accessToken ? "Refresh Token" : null} />}
           </header>
           <main className="App-Main">
               <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<GarbageStarter spotifyApi={spotifyApi} accessKey={accessKey}/>} />
-                    <Route path="/artist" element={
-                        <ArtistPage artistId={'43ZHCT0cAZBISjO8DG9PnE'} spotifyApi={spotifyApi} accessKey={accessKey} />
+                    <Route path="/" element={
+                        <GarbageStarter spotifyApi={spotifyApi} TokenaccessToken={accessToken}/>
                     } />
-                    <Route path="/artist/:artistId" element={(props) => (
-                        <ArtistPage artistId={props.match.artistId} spotifyApi={spotifyApi} accessKey={accessKey} />
-                    )} />
+                    <Route path="/artist">
+                        <Route path=":artistId" element={
+                            <ArtistPage spotifyApi={spotifyApi} accessToken={accessToken} />
+                        } />
+                    </Route>
                     <Route path="/callback" element={
-                        <SpotifyCallbackPage
-                            accessKey={accessKey}
-                            setEveryonesAccessKey={setEveryonesAccessKey}
-                        />}
-                    />
+                        <SpotifyCallbackPage accessToken={accessToken} setEveryonesAccessToken={setEveryonesAccessToken} />
+                    } />
                 </Routes>
               </BrowserRouter>
           </main>

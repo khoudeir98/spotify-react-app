@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import AlbumData from "./AlbumData";
+import {useParams} from "react-router-dom";
 
 export default function ArtistPage(props) {
-    const { artistId, spotifyApi } = props;
+    const { spotifyApi } = props;
+    const { artistId } = useParams();
 
     const [artistData, setArtistData] = useState(null);
     const [artistAlbumData, setArtistAlbumData] = useState(null);
@@ -16,17 +18,17 @@ export default function ArtistPage(props) {
             setArtistAlbumData(albums.body.items);
             setIsLoading(false);
         })();
-    }, [artistId]);
+    }, [artistId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     if(isLoading) return <div>LOADING PLEASE WAIT LOADING</div>;
 
     const artistName = (
-        <h1 className="text-5xl">
+        <h1 className="text-5xl pb-1">
             {artistData.name}
         </h1>);
     const artistImage = artistData.images.filter( (image) => image.width === 640)
         .map( (image) =>
-            <img key={image.url} src={image.url} alt="artist picture 640" className="max-w-2xl"/>
+            <img key={image.url} src={image.url} alt="artist 640" className="max-w-2xl"/>
         );
 
     const albums = artistAlbumData.map((data) =>
@@ -36,15 +38,14 @@ export default function ArtistPage(props) {
 
 
     return (
-        <div>
-            <div className="flex flex-col justify-center items-center">
+        <div className="grid grid-cols-1 divide-y">
+            <div className="flex flex-col justify-center items-center p-1">
                 {artistName}
                 {artistImage}
             </div>
-            <ul className="grid grid-cols-3 gap-2">
+            <ul className="grid grid-cols-3 gap-1 divide-x-2 divide-y-2">
                 {albums}
             </ul>
-
         </div>
     );
 }
