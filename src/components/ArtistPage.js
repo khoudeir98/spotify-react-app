@@ -15,6 +15,7 @@ export default function ArtistPage(props) {
             setArtistData(fetchedArtist.body);
             const albums = await spotifyApi.getArtistAlbums(artistId);
             setArtistAlbumData(albums.body.items);
+
             setIsLoading(false);
         })();
     }, [artistId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -31,10 +32,8 @@ export default function ArtistPage(props) {
         );
 
     const albums = artistAlbumData.map((data) =>
-        <li key={data.id}><AlbumData data={data} /></li>
+        <li key={data.id}><AlbumData data={data} spotifyApi={spotifyApi} /></li>
     );
-
-
 
     return (
         <div className="grid grid-cols-1 divide-y">

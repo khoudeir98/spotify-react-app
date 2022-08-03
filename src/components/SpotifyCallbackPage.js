@@ -6,9 +6,9 @@ export default function SpotifyCallbackPage(props) {
         const params = window.location.hash.match(/access_token=([^&]*)&/);
         if(params !== null) {
             const accessToken = params[1];
-            if (accessToken) props.setEveryonesAccessKey(accessToken)
+            if (accessToken) props.setEveryonesAccessToken(accessToken);
         }
-    }, [window.location])
+    }, [window.location, props.accessToken])
 
-    return props.accessKey === null ? <></> : <Navigate to={"/"}/>;
+    return props.accessToken === null ? <></> : <Navigate to={"/"}/>;
 }

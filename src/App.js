@@ -1,6 +1,6 @@
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     BrowserRouter,
     Routes,
@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
-import { useEffect } from "react";
 import LoginToSpotifyButton from "./components/LoginToSpotifyButton";
 import ArtistPage from "./components/ArtistPage";
 
@@ -21,6 +20,7 @@ function App() {
       redirectUri: process.env.REACT_APP_REDIRECT_URL,
     });
 
+
     const [accessToken, setAccessToken] = useState(sessionStorage.getItem(ACCESS_TOKEN_LOCATION));
     const setEveryonesAccessToken = (stringKey) => {
         sessionStorage.setItem(ACCESS_TOKEN_LOCATION, stringKey);
@@ -28,20 +28,20 @@ function App() {
     };
 
     useEffect(() => {
-        spotifyApi.setAccessToken((accessToken))
+        spotifyApi.setAccessToken((accessToken));
     }, [accessToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
       <div className="App">
           <header className="App-header">
-              <h1>Spotify App.  <br /> React to the fun</h1>
-              {<LoginToSpotifyButton overrideText={accessToken ? "Refresh Token" : null} />}
+              <div className="ml-2"><a href="/">Spotify App</a></div>
+              <div className="my-4 mr-2">{<LoginToSpotifyButton spotifyApi={spotifyApi} overrideText={accessToken ? "Refresh Token" : null} />}</div>
           </header>
           <main className="App-Main">
               <BrowserRouter>
                 <Routes>
                     <Route path="/" element={
-                        <GarbageStarter spotifyApi={spotifyApi} TokenaccessToken={accessToken}/>
+                        <GarbageStarter spotifyApi={spotifyApi} accessToken={accessToken}/>
                     } />
                     <Route path="/artist">
                         <Route path=":artistId" element={
@@ -59,14 +59,3 @@ function App() {
 }
 
 export default App;
-
-// spotifyApi.setAccessToken('<your_access_token>');
-
-// spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE').then(
-//   function(data) {
-//     console.log('Artist albums', data.body);
-//   },
-//   function(err) {
-//     console.error(err);
-//   }
-// )

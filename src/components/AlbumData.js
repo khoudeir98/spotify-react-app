@@ -3,6 +3,8 @@ import React from "react";
 import "./AlbumData.css";
 
 export default function AlbumData(props) {
+    const { spotifyApi } = props;
+
     const artistsNames = props.data.artists.map( (artist) =>
         <a key={artist.id} href={artist.external_urls.spotify} className="box-fill" aria-label="artist-link">
             {artist.name}
@@ -21,7 +23,40 @@ export default function AlbumData(props) {
         );
 
 
-    const tracklist = (props.data?.tracks?.items || []).map( (track) => {
+    const [tracklist, setTracklist] = useState(props.data?.tracks?.items ?
+        mapTracklist(props.data.tracks.items) : null);
+
+    const [showTracklist, setShowTracklist] = useState(false);
+    const toggleTracklist = () => {
+        if (tracklist === null) {
+            //TODO create function, possibly move to ArtistPage?
+            spotifyApi.getAlbumTracks(props.data.id, { limit: 50 }).then( //TODO dynamic limit (handle >50 tracks, "load more")
+                (data) => setTracklist( mapTracklist(data.body.items) )
+            );
+        }
+        setShowTracklist(!showTracklist);
+    }
+
+    return (
+        <div key={props.data.id} className="album-item flex-col">
+            <div className="album-artist gap-x-1">
+                <span>{artistsNames}</span>
+                <span>&nbsp;&mdash;&nbsp;</span>
+                <span>{albumName}</span>
+            </div>
+            <div>
+                <div className="album-art-med" onClick={toggleTracklist}>{albumArtMed}</div>
+                <div className={showTracklist ? "tracklist" : "tracklist hidden"}>
+                    {tracklist !== null && <b>Tracklist:</b>}
+                    <ol className="list-decimal list-inside">{tracklist}</ol>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function mapTracklist(tracksArr) {
+    return tracksArr.map( (track) => {
         const duration = convertMsToMinutesSeconds(track.duration_ms)
         return (
             <li key={track.id} className="track" aria-label="tracklist-item">
@@ -29,23 +64,6 @@ export default function AlbumData(props) {
             </li>
         );
     });
-    const [showTracklist, setShowTracklist] = useState(false);
-    const toggleTracklist = () => {
-        setShowTracklist(!showTracklist)
-    }
-
-    return (
-        <div key={props.data.id} className="album-item flex-col">
-            <div className="album-artist gap-x-1"><span>{artistsNames}</span>&nbsp;&mdash;&nbsp;<span>{albumName}</span></div>
-            <div>
-                <div className="album-art-med" onClick={toggleTracklist}>{albumArtMed}</div>
-                <div className={showTracklist ? "tracklist" : "tracklist hidden"}>
-                    {tracklist.length !== 0 && <b>Tracklist:</b>}
-                    <ol>{tracklist}</ol>
-                </div>
-            </div>
-        </div>
-    );
 }
 
 function padTo2Digits(num) {
