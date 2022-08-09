@@ -34,8 +34,8 @@ function App() {
   return (
       <div className="App">
           <header className="App-header">
-              <div className="ml-2"><a href="/">Spotify App</a></div>
-              <div className="my-4 mr-2">{<LoginToSpotifyButton spotifyApi={spotifyApi} overrideText={accessToken ? "Refresh Token" : null} />}</div>
+              <div className="ml-4"><a href="/">Spotify App</a></div>
+              <div className="my-4 mr-4">{<LoginToSpotifyButton spotifyApi={spotifyApi} overrideText={accessToken ? "Refresh Token" : null} />}</div>
           </header>
           <main className="App-Main">
               <BrowserRouter>

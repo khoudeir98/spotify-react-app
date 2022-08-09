@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { Navigate } from "react-router-dom";
 
 export default function SpotifyCallbackPage(props) {
@@ -8,7 +8,7 @@ export default function SpotifyCallbackPage(props) {
             const accessToken = params[1];
             if (accessToken) props.setEveryonesAccessToken(accessToken);
         }
-    }, [window.location, props.accessToken])
+    }, [window.location]);
 
     return props.accessToken === null ? <></> : <Navigate to={"/"}/>;
 }

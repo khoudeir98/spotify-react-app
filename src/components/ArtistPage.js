@@ -28,10 +28,10 @@ export default function ArtistPage(props) {
         </h1>);
     const artistImage = artistData.images.filter( (image) => image.width === 640)
         .map( (image) =>
-            <img key={image.url} src={image.url} alt="artist 640" className="max-w-2xl"/>
+            <img key={image.url} src={image.url} alt="artist 640" className="max-w-2xl border-solid border-4 border-gray-600"/>
         );
 
-    const albums = artistAlbumData.map((data) =>
+    const albums = artistAlbumData.map( (data) =>
         <li key={data.id}><AlbumData data={data} spotifyApi={spotifyApi} /></li>
     );
 
