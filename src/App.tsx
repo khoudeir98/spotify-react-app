@@ -1,11 +1,7 @@
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-node';
-import { useState, useEffect } from 'react';
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-} from "react-router-dom";
+import {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
 import LoginToSpotifyButton from "./components/LoginToSpotifyButton";
@@ -22,13 +18,13 @@ function App() {
 
 
     const [accessToken, setAccessToken] = useState(sessionStorage.getItem(ACCESS_TOKEN_LOCATION));
-    const setEveryonesAccessToken = (stringKey) => {
+    const setEveryonesAccessToken = (stringKey: string) => {
         sessionStorage.setItem(ACCESS_TOKEN_LOCATION, stringKey);
         setAccessToken(stringKey);
     };
 
     useEffect(() => {
-        spotifyApi.setAccessToken((accessToken));
+        spotifyApi.setAccessToken(accessToken!);
     }, [accessToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
