@@ -1,26 +1,29 @@
 import React, {useEffect, useState} from "react";
-import AlbumData from "./AlbumData";
 import {useParams} from "react-router-dom";
+import SpotifyWebApi from "spotify-web-api-node";
+import AlbumData from "./AlbumData";
+import {Album, Artist} from "../common/types"
 
-export default function ArtistPage(props) {
-    const { spotifyApi } = props;
-    const { artistId } = useParams();
+export default function ArtistPage({spotifyApi}: {spotifyApi: SpotifyWebApi}) {
+    const { artistId = "" } = useParams();
 
-    const [artistData, setArtistData] = useState(null);
-    const [artistAlbumData, setArtistAlbumData] = useState(null);
+    const [artistData, setArtistData] = useState<Artist | null>(null);
+    const [artistAlbumData, setArtistAlbumData] = useState<Album[] | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     useEffect( () => {
         (async () => {
             const fetchedArtist = await spotifyApi.getArtist(artistId);
-            setArtistData(fetchedArtist.body);
-            const albums = await spotifyApi.getArtistAlbums(artistId);
-            setArtistAlbumData(albums.body.items);
+            const artist: Artist = fetchedArtist.body as Artist;
+            setArtistData(artist);
+            const fetchedAlbums = await spotifyApi.getArtistAlbums(artistId);
+            const albums: Album[] = fetchedAlbums.body.items as unknown as Album[];
+            setArtistAlbumData(albums);
 
             setIsLoading(false);
         })();
-    }, [artistId]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [artistId]);
 
-    if(isLoading) return <div>LOADING PLEASE WAIT LOADING</div>;
+    if(isLoading || artistData === null || artistAlbumData === null) return <div>LOADING PLEASE WAIT LOADING</div>;
 
     const artistName = (
         <h1 className="text-5xl pb-1">
@@ -32,7 +35,7 @@ export default function ArtistPage(props) {
         );
 
     const albums = artistAlbumData.map( (data) =>
-        <li key={data.id}><AlbumData data={data} spotifyApi={spotifyApi} /></li>
+        <li key={data.id}><AlbumData data={data} getAlbumTracks={spotifyApi.getAlbumTracks.bind(spotifyApi)} /></li>
     );
 
     return (

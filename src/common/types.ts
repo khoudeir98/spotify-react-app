@@ -9,7 +9,7 @@ export interface Artist {
         spotify: string
     },
     id: string,
-    images?: Image[],
+    images: Image[],
     name: string,
     type: "artist"
 }

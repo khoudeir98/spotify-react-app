@@ -4,9 +4,11 @@ import SpotifyWebApi from "spotify-web-api-node";
 import {Album, Track} from "../common/types";
 import {convertMsToMinutesSeconds} from "../common/utils";
 
+export type GetAlbumTracks = typeof SpotifyWebApi.prototype.getAlbumTracks;
 
-export default function AlbumData({data: albumData, spotifyApi}: {data: Album, spotifyApi: SpotifyWebApi}) {
+export default function AlbumData({data: albumData, getAlbumTracks}: {data: Album, getAlbumTracks: GetAlbumTracks}) {
 
+    //TODO break these 3 into own components
     const artistsNames = albumData.artists.map( (artist) =>
         <a key={artist.id} href={artist.external_urls.spotify} className="box-fill" aria-label="artist-link">
             {artist.name}
@@ -26,13 +28,13 @@ export default function AlbumData({data: albumData, spotifyApi}: {data: Album, s
         );
 
 
-    const [tracklist, setTracklist] = useState(albumData?.tracks?.items ?? null);
+    const [tracklist, setTracklist] = useState<Track[] | null>(albumData?.tracks?.items ?? null);
     const [showTracklist, setShowTracklist] = useState(false);
     const toggleTracklist = async () => {
         //TODO dynamic limit ("load more")
         if (tracklist === null) {
-            const fetchedTrackData = await spotifyApi.getAlbumTracks(albumData.id, { limit: 50 });
-            const trackData: Track[] = fetchedTrackData.body.items;
+            const fetchedTrackData = await getAlbumTracks(albumData.id, { limit: 50 });
+            const trackData: Track[] = fetchedTrackData.body.items as unknown as Track[];
             setTracklist(trackData ?? null);
         }
         setShowTracklist(!showTracklist);
@@ -56,8 +58,6 @@ export default function AlbumData({data: albumData, spotifyApi}: {data: Album, s
 
 
 function Tracklist({tracks, show}: {tracks: Track[], show: boolean}) {
-    //if (tracks === null || tracks.length === 0) return null;
-
     return (
         <div className={show ? "tracklist" : "tracklist hidden"} data-testid="tracklist">
             <b>Tracklist:</b>

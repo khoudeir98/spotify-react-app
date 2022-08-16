@@ -1,6 +1,6 @@
-import './App.css';
-import SpotifyWebApi from 'spotify-web-api-node';
-import {useEffect, useState} from 'react';
+import "./App.css";
+import SpotifyWebApi from "spotify-web-api-node";
+import {useEffect, useState} from "react";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import GarbageStarter from "./components/GarbageStarter";
 import SpotifyCallbackPage from "./components/SpotifyCallbackPage";
@@ -24,7 +24,7 @@ function App() {
     };
 
     useEffect(() => {
-        spotifyApi.setAccessToken(accessToken!);
+        if(accessToken) spotifyApi.setAccessToken(accessToken);
     }, [accessToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -41,7 +41,7 @@ function App() {
                     } />
                     <Route path="/artist">
                         <Route path=":artistId" element={
-                            <ArtistPage spotifyApi={spotifyApi} accessToken={accessToken} />
+                            <ArtistPage spotifyApi={spotifyApi} />
                         } />
                     </Route>
                     <Route path="/callback" element={
